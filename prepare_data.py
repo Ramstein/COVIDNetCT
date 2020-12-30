@@ -1,7 +1,8 @@
-import os
-import cv2
-import csv
 import argparse
+import csv
+import os
+
+import cv2
 
 import data_utils
 

@@ -1,4 +1,5 @@
 import math
+
 import tensorflow as tf
 
 from data_utils import exterior_exclusion
@@ -6,6 +7,7 @@ from data_utils import exterior_exclusion
 
 def random_rotation(image, max_degrees, bbox=None, prob=0.5):
     """Applies random rotation to image and bbox"""
+
     def _rotation(image, bbox):
         # Get random angle
         degrees = tf.random.uniform([], minval=-max_degrees, maxval=max_degrees, dtype=tf.float32)
@@ -40,10 +42,11 @@ def random_rotation(image, max_degrees, bbox=None, prob=0.5):
 
 def random_bbox_jitter(bbox, image_height, image_width, max_fraction, prob=0.5):
     """Randomly jitters bbox coordinates by +/- jitter_fraction of the width/height"""
+
     def _bbox_jitter(bbox):
         bbox = tf.cast(bbox, tf.float32)
-        width_jitter = max_fraction*(bbox[2] - bbox[0])
-        height_jitter = max_fraction*(bbox[3] - bbox[1])
+        width_jitter = max_fraction * (bbox[2] - bbox[0])
+        height_jitter = max_fraction * (bbox[3] - bbox[1])
         xmin = bbox[0] + tf.random.uniform([], minval=-width_jitter, maxval=width_jitter, dtype=tf.float32)
         ymin = bbox[1] + tf.random.uniform([], minval=-height_jitter, maxval=height_jitter, dtype=tf.float32)
         xmax = bbox[2] + tf.random.uniform([], minval=-width_jitter, maxval=width_jitter, dtype=tf.float32)
@@ -57,11 +60,12 @@ def random_bbox_jitter(bbox, image_height, image_width, max_fraction, prob=0.5):
 
 def random_shift_and_scale(image, max_shift, max_scale_change, prob=0.5):
     """Applies random shift and scale to pixel values"""
+
     def _shift_and_scale(image):
         shift = tf.cast(tf.random.uniform([], minval=-max_shift, maxval=max_shift, dtype=tf.int32), tf.float32)
         scale = tf.random.uniform([], minval=(1. - max_scale_change),
                                   maxval=(1. + max_scale_change), dtype=tf.float32)
-        image = scale*(tf.cast(image, tf.float32) + shift)
+        image = scale * (tf.cast(image, tf.float32) + shift)
         image = tf.cast(tf.clip_by_value(image, 0., 255.), tf.uint8)
         return image
 
@@ -99,11 +103,13 @@ def random_shear(image, max_lambda, bbox=None, prob=0.5):
 
 def random_exterior_exclusion(image, prob=0.5):
     """Randomly removes visual features exterior to the patient's body"""
+
     def _exterior_exclusion(image):
         shape = image.get_shape()
         image = tf.py_func(exterior_exclusion, [image], tf.uint8)
         image.set_shape(shape)
         return image
+
     return tf.cond(_should_apply(prob), lambda: _exterior_exclusion(image), lambda: image)
 
 

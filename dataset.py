@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 import tensorflow as tf
 
@@ -7,6 +8,7 @@ import augmentations
 
 class COVIDxCTDataset:
     """COVIDx-CT dataset class, which handles construction of train/validation datasets"""
+
     def __init__(self, data_dir, image_height=512, image_width=512, max_bbox_jitter=0.025, max_rotation=10,
                  max_shear=0.15, max_pixel_shift=10, max_pixel_scale_change=0.2, shuffle_buffer=1000):
         # General parameters
@@ -68,6 +70,7 @@ class COVIDxCTDataset:
 
     def _get_load_and_process_fn(self, is_training):
         """Creates map function for TF dataset"""
+
         def load_and_process(path, label, bbox):
             # Load image
             image = tf.image.decode_png(tf.io.read_file(path), channels=1)

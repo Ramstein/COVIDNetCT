@@ -2,18 +2,19 @@
 Training/testing/inference script for COVIDNet-CT model for COVID-19 detection in CT images.
 """
 
+import json
 import os
 import sys
-import cv2
-import json
-import numpy as np
 from math import ceil
-import tensorflow as tf
+
+import cv2
 import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-from dataset import COVIDxCTDataset
 from data_utils import auto_body_crop
+from dataset import COVIDxCTDataset
 from utils import parse_args
 
 # Dict keys
@@ -61,6 +62,7 @@ def create_session():
 
 class Metrics:
     """Lightweight class for tracking metrics"""
+
     def __init__(self):
         num_classes = len(CLASS_NAMES)
         self.labels = list(range(num_classes))
@@ -89,6 +91,7 @@ class Metrics:
 
 class COVIDNetCTRunner:
     """Primary training/testing/inference class"""
+
     def __init__(self, meta_file, ckpt=None, data_dir=None, input_height=512, input_width=512, max_bbox_jitter=0.025,
                  max_rotation=10, max_shear=0.15, max_pixel_shift=10, max_pixel_scale_change=0.2):
         self.meta_file = meta_file

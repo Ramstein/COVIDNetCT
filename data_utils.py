@@ -1,7 +1,8 @@
-import os
-import cv2
 import glob
 import itertools
+import os
+
+import cv2
 import numpy as np
 
 IMG_EXTENSIONS = ('png', 'jpg', 'jpeg', 'tif', 'bmp')
@@ -9,8 +10,8 @@ IMG_EXTENSIONS = ('png', 'jpg', 'jpeg', 'tif', 'bmp')
 
 def hu_to_uint8(hu_images, window_width, window_center):
     """Converts HU images to uint8 images"""
-    images = (hu_images.astype(np.float) - window_center + window_width/2)/window_width
-    uint8_images = np.uint8(255.0*np.clip(images, 0.0, 1.0))
+    images = (hu_images.astype(np.float) - window_center + window_width / 2) / window_width
+    uint8_images = np.uint8(255.0 * np.clip(images, 0.0, 1.0))
     return uint8_images
 
 
@@ -57,13 +58,13 @@ def auto_body_crop(image, scale=1.0):
 
     # Scale to final bbox
     if scale > 0 and scale != 1.0:
-        center = ((xmax + xmin)/2, (ymin + ymax)/2)
-        width = scale*(xmax - xmin + 1)
-        height = scale*(ymax - ymin + 1)
-        xmin = int(center[0] - width/2)
-        xmax = int(center[0] + width/2)
-        ymin = int(center[1] - height/2)
-        ymax = int(center[1] + height/2)
+        center = ((xmax + xmin) / 2, (ymin + ymax) / 2)
+        width = scale * (xmax - xmin + 1)
+        height = scale * (ymax - ymin + 1)
+        xmin = int(center[0] - width / 2)
+        xmax = int(center[0] + width / 2)
+        ymin = int(center[1] - height / 2)
+        ymax = int(center[1] + height / 2)
 
     return image[ymin:ymax, xmin:xmax], (xmin, ymin, xmax, ymax)
 
